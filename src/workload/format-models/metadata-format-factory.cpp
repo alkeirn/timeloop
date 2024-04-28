@@ -23,6 +23,8 @@
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * Modified 2024 MIT
  */
 
 #include "workload/format-models/metadata-format-factory.hpp"
@@ -31,7 +33,7 @@ namespace problem
 {
 
 // list of lower-case format names
-// std::vector<std::string> rank_formats = {"u", "b", "rle", "cp", "uop", "ub"};
+// std::vector<std::string> rank_formats = {"u", "b", "rle", "cp", "uop", "ub", "hf", "d"};
 
 //-------------------------------------------------//
 //              MetaData Format Factory            //
@@ -68,6 +70,16 @@ std::shared_ptr<MetaDataFormatSpecs> MetaDataFormatFactory::ParseSpecs(config::C
     {
       auto b_specs = Bitmask::ParseSpecs(metadata_rank_config);
       specs_ptr = std::make_shared<Bitmask::Specs>(b_specs);
+    }
+    else if (metadata_format_name == "d" || metadata_format_name == "D")
+    {
+      auto d_specs = DeltaEncoding::ParseSpecs(metadata_rank_config);
+      specs_ptr = std::make_shared<DeltaEncoding::Specs>(d_specs);
+    }
+    else if (metadata_format_name == "hf" || metadata_format_name == "HF")
+    {
+      auto hf_specs = HuffmanEncoding::ParseSpecs(metadata_rank_config);
+      specs_ptr = std::make_shared<HuffmanEncoding::Specs>(hf_specs);
     }
    else
     {
@@ -112,6 +124,18 @@ std::shared_ptr<MetaDataFormat> MetaDataFormatFactory::Construct(std::shared_ptr
     auto specs_ptr = *std::static_pointer_cast<Bitmask::Specs>(specs);
     auto b_metadata_ptr = std::make_shared<Bitmask>(specs_ptr);
     metadata_format_ptr = std::static_pointer_cast<MetaDataFormat>(b_metadata_ptr);
+  }
+  else if (specs->Name() == "d")
+  {
+    auto specs_ptr = *std::static_pointer_cast<DeltaEncoding::Specs>(specs);
+    auto d_metadata_ptr = std::make_shared<DeltaEncoding>(specs_ptr);
+    metadata_format_ptr = std::static_pointer_cast<MetaDataFormat>(d_metadata_ptr);
+  }
+  else if (specs->Name() == "hf")
+  {
+    auto specs_ptr = *std::static_pointer_cast<HuffmanEncoding::Specs>(specs);
+    auto hf_metadata_ptr = std::make_shared<HuffmanEncoding>(specs_ptr);
+    metadata_format_ptr = std::static_pointer_cast<MetaDataFormat>(hf_metadata_ptr);
   }
  else
   {
