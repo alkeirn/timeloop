@@ -52,19 +52,14 @@ HuffmanEncoding::Specs HuffmanEncoding::ParseSpecs(config::CompoundConfigNode fo
 
   HuffmanEncoding::Specs specs;
   // by default, no special attributes need to be set manually by the users
-  specs.payload_word_bits = std::numeric_limits<std::uint32_t>::max();
-  specs.metadata_word_bits = std::numeric_limits<std::uint32_t>::max();
-
+  specs.payload_word_bits = std::numeric_limits<std::uint32_t>::max(); //this should be the avaerage number of bits depending on the distribution. Default CIFAR 10 data average
+  specs.metadata_word_bits = 0; // metadata implemented via lookup table. Assuming 255 values, and a large input, metadata ~0
+  
+  // Check if there is a new payload value set in the yaml file for a different distribution
   if (format_specs.exists("payload-word-bits"))
   {
     format_specs.lookupValue("payload-word-bits", specs.payload_word_bits);
   }
-
-  if (format_specs.exists("metadata-word-bits"))
-  {
-    format_specs.lookupValue("metadata-word-bits", specs.metadata_word_bits);
-  }
-
 
   return specs;
 }
@@ -83,9 +78,9 @@ PerRankMetaDataTileOccupancy HuffmanEncoding::GetOccupancy(const MetaDataOccupan
 
   PerRankMetaDataTileOccupancy occupancy;
   occupancy.payload_word_bits = specs_.payload_word_bits;
-  occupancy.metadata_word_bits = specs_.metadata_word_bits;
-  occupancy.metadata_units = number_of_nnz_coord_per_fiber * number_of_fibers;
-  occupancy.payload_units =  occupancy.metadata_units;
+  occupancy.metadata_word_bits = 0;
+  occupancy.metadata_units = 0; //approximately no metadata
+  occupancy.payload_units = number_of_nnz_coord_per_fiber * number_of_fibers;
 
   return occupancy;
 }

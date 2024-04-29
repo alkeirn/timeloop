@@ -49,18 +49,12 @@ DeltaEncoding::Specs DeltaEncoding::ParseSpecs(config::CompoundConfigNode format
   DeltaEncoding::Specs specs;
   // by default, no special attributes need to be set manually by the users
   specs.payload_word_bits = std::numeric_limits<std::uint32_t>::max();
-  specs.metadata_word_bits = std::numeric_limits<std::uint32_t>::max();
+  specs.metadata_word_bits = 0; //no metadata, delta can be used as is
 
   if (format_specs.exists("payload-word-bits"))
   {
     format_specs.lookupValue("payload-word-bits", specs.payload_word_bits);
   }
-
-  if (format_specs.exists("metadata-word-bits"))
-  {
-    format_specs.lookupValue("metadata-word-bits", specs.metadata_word_bits);
-  }
-
 
   return specs;
 }
@@ -79,9 +73,9 @@ PerRankMetaDataTileOccupancy DeltaEncoding::GetOccupancy(const MetaDataOccupancy
 
   PerRankMetaDataTileOccupancy occupancy;
   occupancy.payload_word_bits = specs_.payload_word_bits;
-  occupancy.metadata_word_bits = specs_.metadata_word_bits;
-  occupancy.metadata_units = number_of_nnz_coord_per_fiber * number_of_fibers;
-  occupancy.payload_units =  occupancy.metadata_units;
+  occupancy.metadata_word_bits = 0;
+  occupancy.metadata_units = 0;
+  occupancy.payload_units =  number_of_nnz_coord_per_fiber * number_of_fibers;
 
   return occupancy;
 }
