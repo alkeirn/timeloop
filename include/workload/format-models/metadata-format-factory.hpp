@@ -28,6 +28,8 @@
 #pragma once
 
 #include "metadata-format.hpp"
+#include "delta-encoding.hpp"
+#include "huffman-encoding.hpp"
 #include "uncompressed-offset-pair.hpp"
 #include "run-length-encoding.hpp"
 #include "coordinate-payload.hpp"
