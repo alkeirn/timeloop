@@ -52,7 +52,7 @@ HuffmanEncoding::Specs HuffmanEncoding::ParseSpecs(config::CompoundConfigNode fo
 
   HuffmanEncoding::Specs specs;
   // by default, no special attributes need to be set manually by the users
-  specs.payload_word_bits = std::numeric_limits<std::uint32_t>::max(); //this should be the avaerage number of bits depending on the distribution. Default CIFAR 10 data average
+  specs.payload_word_bits = 8; //this should be the average number of bits depending on the distribution. Default CIFAR 10 data average
   specs.metadata_word_bits = 0; // metadata implemented via lookup table. Assuming 255 values, and a large input, metadata ~0
   
   // Check if there is a new payload value set in the yaml file for a different distribution
