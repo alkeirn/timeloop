@@ -199,6 +199,8 @@ workload/density-models/banded-distribution.cpp
 workload/format-models/metadata-format.cpp
 workload/format-models/metadata-format-factory.cpp
 workload/format-models/run-length-encoding.cpp
+workload/format-models/delta-encoding.cpp 
+workload/format-models/huffman-encoding.cpp                      
 workload/format-models/uncompressed-offset-pair.cpp
 workload/format-models/coordinate-payload.cpp
 workload/format-models/uncompressed-bitmask.cpp
